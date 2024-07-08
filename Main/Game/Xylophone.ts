@@ -1,14 +1,27 @@
 const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d")!;
+
 const keyCount = 8;
 let pitches: string[] = ["C", "D", "E", "F", "G", "A", "H", "C'"];
+let sounds: string[] = ["xylophone-c3.wav", "xylophone-d3.wav", "xylophone-e3.wav", "xylophone-f3.wav", 
+                        "xylophone-g3.wav", "xylophone-a.wav", "xylophone-b-h.wav", "xylophone-c2_kleines_C.wav"]
 let colors: string[] = ["#ea4029", "#2020b8", "#f3f646", "#42f4e9", "#53ed41", "#b53af3", "#f0af37", "#f360c0"];
 let keys: XyloKey[] = [];
+
+const audioCtx = new AudioContext();
+const audioA = new Audio("xylophone-a.wav");
+const keyH = new Audio("xylophone-b-h.wav");
+const keyC = new Audio("xylophone-c2_kleines_C.wav");
+
+
+const source = audioCtx.createMediaElementSource(audioA);
+source.connect(audioCtx.destination);
 
 canvas.addEventListener("click", handleClick);
 createBoard();
 
 interface XyloKey {
+    sound: string,
     pitch: string,
     width: number,
     length: number,
@@ -40,6 +53,7 @@ function createBoard() {
         let l: number = 560 - 40* i;
 
         let newKey: XyloKey = {
+            sound: sounds[i],
             pitch: pitches[i],
             width: 100,
             length: l,
@@ -76,9 +90,15 @@ function handleClick(_event: MouseEvent) {
     for(let i: number = 0; i < keys.length; i++) {
 
         let keyCheck: XyloKey = keys[i];
+        let sound = new Audio(keyCheck.sound);
 
         if (ctx.isPointInPath(keyCheck.path, x, y)) {
             console.log(keyCheck.pitch);
+            audioCtx.resume().then(() => {
+                sound.play();;
+              });
+            
+            
         }
     }
 
