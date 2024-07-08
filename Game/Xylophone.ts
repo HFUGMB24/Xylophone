@@ -27,9 +27,9 @@ function createBoard() {
     ctx.lineWidth = 3;
 
     rods.moveTo(120, 200);
-    rods.lineTo(canvas.width - 180, 200);
+    rods.lineTo(canvas.width - 150, 200);
     rods.moveTo(120, canvas.height - 200);
-    rods.lineTo(canvas.width - 180, canvas.height - 200);
+    rods.lineTo(canvas.width - 150, canvas.height - 200);
 
     ctx.stroke(rods);
 
@@ -41,7 +41,7 @@ function createBoard() {
 
         let newKey: XyloKey = {
             pitch: pitches[i],
-            width: 75,
+            width: 100,
             length: l,
             color: colors[i],
             posX: x,

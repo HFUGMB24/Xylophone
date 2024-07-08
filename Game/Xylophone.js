@@ -12,9 +12,9 @@ function createBoard() {
     ctx.strokeStyle = "black";
     ctx.lineWidth = 3;
     rods.moveTo(120, 200);
-    rods.lineTo(canvas.width - 180, 200);
+    rods.lineTo(canvas.width - 150, 200);
     rods.moveTo(120, canvas.height - 200);
-    rods.lineTo(canvas.width - 180, canvas.height - 200);
+    rods.lineTo(canvas.width - 150, canvas.height - 200);
     ctx.stroke(rods);
     for (let i = 0; i < keyCount; i++) {
         let y = 20 + 20 * i;
@@ -22,7 +22,7 @@ function createBoard() {
         let l = 560 - 40 * i;
         let newKey = {
             pitch: pitches[i],
-            width: 75,
+            width: 100,
             length: l,
             color: colors[i],
             posX: x,
