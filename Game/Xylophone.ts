@@ -22,14 +22,15 @@ function createBoard() {
     for (let i: number = 0; i < keyCount; i++) {
 
         let y: number = 100;
-        let x: number
+        let x: number = 50 + 60*i;
         
         let newKey: XyloKey = {
             pitch: pitches[i],
             width: 50,
             length: 400,
             color: colors[i],
-            posX: 
+            posX: x,
+            posY: y,
 
         }
     }
