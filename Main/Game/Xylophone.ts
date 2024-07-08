@@ -9,13 +9,10 @@ let colors: string[] = ["#ea4029", "#2020b8", "#f3f646", "#42f4e9", "#53ed41", "
 let keys: XyloKey[] = [];
 
 const audioCtx = new AudioContext();
-const audioA = new Audio("xylophone-a.wav");
-const keyH = new Audio("xylophone-b-h.wav");
-const keyC = new Audio("xylophone-c2_kleines_C.wav");
 
 
-const source = audioCtx.createMediaElementSource(audioA);
-source.connect(audioCtx.destination);
+//const source = audioCtx.createMediaElementSource(audioA);
+//source.connect(audioCtx.destination);
 
 canvas.addEventListener("click", handleClick);
 createBoard();
