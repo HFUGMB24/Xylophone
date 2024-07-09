@@ -2,6 +2,11 @@ document.getElementById("start-game")!.addEventListener("click", startGame);
 const audioCtx = new AudioContext();
 
 let keys: XyloKey[] = [];
+let playerSong: string = "";
+let playerTurn: boolean = false;
+let keysPlayed: number = 0;
+let song: string = "12345678"; 
+
 interface XyloKey {
     sound: string,
     pitch: string,
@@ -24,23 +29,24 @@ function startGame() {
     canvas.height = 600;
     canvas.style.border = "1px solid black";
     document.body.appendChild(canvas);
-    
+
+
     const button = document.createElement('button');
     button.id = "Simon";
-    button.textContent = 'Click me';
+    button.textContent = 'Play next note';
     button.style.background = "blue";
     button.style.color = "white";
     document.body.appendChild(button);
     button.addEventListener('click', () => {
-        let song: string = "CDEFGAHC'"
+        
         simonSays(song);
         console.log('Button clicked');
-});
+    });
 
     // Initialize the xylophone game
     initXylophoneGame();
 
-   
+
 }
 
 function initXylophoneGame() {
@@ -48,11 +54,10 @@ function initXylophoneGame() {
     const ctx: CanvasRenderingContext2D = canvas.getContext("2d")!;
 
     const keyCount = 8;
-    let pitches: string[] = ["C", "D", "E", "F", "G", "A", "H", "C'"];
+    let pitches: string[] = ["1", "2", "3", "4", "5", "6", "7", "8"];
     let sounds: string[] = ["Sounds/xylophone-c3.wav", "Sounds/xylophone-d3.wav", "Sounds/xylophone-e3.wav", "Sounds/xylophone-f3.wav",
-                            "Sounds/xylophone-g3.wav", "Sounds/xylophone-a.wav", "Sounds/xylophone-b-h.wav", "Sounds/xylophone-c2_kleines_C.wav"];
+        "Sounds/xylophone-g3.wav", "Sounds/xylophone-a.wav", "Sounds/xylophone-b-h.wav", "Sounds/xylophone-c2_kleines_C.wav"];
     let colors: string[] = ["#ea4029", "#2020b8", "#f3f646", "#42f4e9", "#53ed41", "#b53af3", "#f0af37", "#f360c0"];
-    let keys: XyloKey[] = [];
 
     const audioCtx = new AudioContext();
 
@@ -111,36 +116,72 @@ function initXylophoneGame() {
     function handleClick(_event: MouseEvent) {
         let x: number = _event.offsetX;
         let y: number = _event.offsetY;
+        
 
-        for (let i: number = 0; i < keys.length; i++) {
-            let keyCheck: XyloKey = keys[i];
-            let sound = new Audio(keyCheck.sound);
+        if (playerTurn == true) {
 
-            if (ctx.isPointInPath(keyCheck.path, x, y)) {
-                console.log(keyCheck.pitch);
-                audioCtx.resume().then(() => {
-                    sound.play();
-                });
+            if (keysPlayed < songProgress) {
+                for (let i: number = 0; i < keys.length; i++) {
+                    let keyCheck: XyloKey = keys[i];
+                    let sound = new Audio(keyCheck.sound);
+
+                    if (ctx.isPointInPath(keyCheck.path, x, y)) {
+                        playerSong = playerSong + keyCheck.pitch;
+                        console.log(keyCheck.pitch);
+                        audioCtx.resume().then(() => {
+                            sound.play();
+                        });
+                        keysPlayed += 1;
+                        console.log("Keys played: " + keysPlayed);
+                        if (checkPlayerSong(song, playerSong) == false) {
+                            console.log("You made a mistake");
+                        }
+                        if(keysPlayed >= songProgress) {
+                            playerTurn = false;
+                        }
+                        
+                    }
+                }               
             }
+           
+        }
+    }
+}
+
+let songProgress: number = 0;
+let strikeCount: number = 0;
+//standard game mode
+function simonSays(_song: string) {
+
+    if (playerTurn == false) {
+
+        let note: string = _song[songProgress];
+        for (let b: number = 0; b < keys.length; b++) {
+            if (note == keys[b].pitch) {
+
+                console.log(note);
+                let sound = new Audio(keys[b].sound);
+
+                audioCtx.resume();
+                sound.play();
+                songProgress += 1;
+                playerTurn = true;
+                playerSong = "";
+                keysPlayed = 0;
+
+                console.log(songProgress);
+            }
+
         }
     }
 }
 
 
-//standard game mode
-function simonSays(_song: string) {
-
-    let strikeCount: number = 0;
-    for (let i: number = 0; i < _song.length; i++) {
-        let note: string = _song[i];
-        for (let b: number = 0; b < keys.length; b++) {
-            if (note == keys[b].pitch) {
-                console.log(note);
-                let sound = new Audio(keys[b].sound);
-                audioCtx.resume();
-                sound.play();
-                
-            }
-        }
+function checkPlayerSong(_song: string, _player: string): boolean {
+    let playerCorrect: boolean = true;
+    let songPart:string = _song.substring(0,keysPlayed);
+    if (songPart !== _player) {
+        playerCorrect = false;
     }
+    return playerCorrect
 }
