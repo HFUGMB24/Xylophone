@@ -1,14 +1,72 @@
-body, html {
+/* startscreen.css */
+
+/* General styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
     margin: 0;
     padding: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f0f0f0;
 }
 
-canvas {
-    border: 1px solid black;
+/* Header styles */
+h1 {
+    font-size: 3em;
+    color: #3e64ff;
+    margin-bottom: 20px;
+}
+
+/* Selector styles */
+#Selector {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    width: 300px;
+}
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Label styles */
+label {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+/* Select styles */
+select {
+    font-size: 1em;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #3e64ff;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Button styles */
+button {
+    background-color: #3e64ff;
+    color: #fff;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #324cb8;
 }
