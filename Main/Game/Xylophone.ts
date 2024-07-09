@@ -33,7 +33,7 @@ function startGame() {
     document.body.appendChild(button);
     button.addEventListener('click', () => {
         let song: string = "CDEFGAHC'"
-        SimonSays(song);
+        simonSays(song);
         console.log('Button clicked');
 });
 
