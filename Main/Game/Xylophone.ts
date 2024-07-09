@@ -1,4 +1,17 @@
 document.getElementById("start-game")!.addEventListener("click", startGame);
+const audioCtx = new AudioContext();
+
+let keys: XyloKey[] = [];
+interface XyloKey {
+    sound: string,
+    pitch: string,
+    width: number,
+    length: number,
+    color: string,
+    posX: number,
+    posY: number,
+    path: Path2D,
+}
 
 function startGame() {
     // Clear the body
@@ -11,19 +24,22 @@ function startGame() {
     canvas.height = 600;
     canvas.style.border = "1px solid black";
     document.body.appendChild(canvas);
+   
 
     // Initialize the xylophone game
     initXylophoneGame();
+    let song: string = "CDEFGAHC'"
+    SimonSays(song);
 }
 
 function initXylophoneGame() {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    const ctx = canvas.getContext("2d")!;
+    const ctx: CanvasRenderingContext2D = canvas.getContext("2d")!;
 
     const keyCount = 8;
     let pitches: string[] = ["C", "D", "E", "F", "G", "A", "H", "C'"];
-    let sounds: string[] = ["xylophone-c3.wav", "xylophone-d3.wav", "xylophone-e3.wav", "xylophone-f3.wav",
-                            "xylophone-g3.wav", "xylophone-a.wav", "xylophone-b-h.wav", "xylophone-c2_kleines_C.wav"];
+    let sounds: string[] = ["Sounds/xylophone-c3.wav", "Sounds/xylophone-d3.wav", "Sounds/xylophone-e3.wav", "Sounds/xylophone-f3.wav",
+                            "Sounds/xylophone-g3.wav", "Sounds/xylophone-a.wav", "Sounds/xylophone-b-h.wav", "Sounds/xylophone-c2_kleines_C.wav"];
     let colors: string[] = ["#ea4029", "#2020b8", "#f3f646", "#42f4e9", "#53ed41", "#b53af3", "#f0af37", "#f360c0"];
     let keys: XyloKey[] = [];
 
@@ -32,17 +48,7 @@ function initXylophoneGame() {
     canvas.addEventListener("click", handleClick);
     createBoard();
 
-    interface XyloKey {
-        sound: string,
-        pitch: string,
-        width: number,
-        length: number,
-        color: string,
-        posX: number,
-        posY: number,
-        path: Path2D,
-    }
-
+    //build the xylophone
     function createBoard() {
         let rods: Path2D = new Path2D;
         ctx.strokeStyle = "black";
@@ -90,6 +96,7 @@ function initXylophoneGame() {
         ctx.stroke(keyPath);
     }
 
+    //playing sound when a key is clicked on
     function handleClick(_event: MouseEvent) {
         let x: number = _event.offsetX;
         let y: number = _event.offsetY;
@@ -103,6 +110,24 @@ function initXylophoneGame() {
                 audioCtx.resume().then(() => {
                     sound.play();
                 });
+            }
+        }
+    }
+}
+
+
+//standard game mode
+function SimonSays(_song: string) {
+
+    let strikeCount: number = 0;
+    for (let i: number = 0; i < _song.length; i++) {
+        let note: string = _song[i];
+        for (let b: number = 0; b < keys.length; b++) {
+            if (note == keys[b].pitch) {
+                let sound = new Audio(keys[b].sound);
+                audioCtx.resume();
+                sound.play();
+                
             }
         }
     }
