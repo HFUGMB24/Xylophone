@@ -24,12 +24,22 @@ function startGame() {
     canvas.height = 600;
     canvas.style.border = "1px solid black";
     document.body.appendChild(canvas);
-   
+    
+    const button = document.createElement('button');
+    button.id = "Simon";
+    button.textContent = 'Click me';
+    button.style.background = "blue";
+    button.style.color = "white";
+    document.body.appendChild(button);
+    button.addEventListener('click', () => {
+    SimonSays(song);
+    console.log('Button clicked');
+});
 
     // Initialize the xylophone game
     initXylophoneGame();
     let song: string = "CDEFGAHC'"
-    SimonSays(song);
+   
 }
 
 function initXylophoneGame() {
