@@ -128,13 +128,14 @@ function initXylophoneGame() {
 
 
 //standard game mode
-function SimonSays(_song: string) {
+function simonSays(_song: string) {
 
     let strikeCount: number = 0;
     for (let i: number = 0; i < _song.length; i++) {
         let note: string = _song[i];
         for (let b: number = 0; b < keys.length; b++) {
             if (note == keys[b].pitch) {
+                console.log(note);
                 let sound = new Audio(keys[b].sound);
                 audioCtx.resume();
                 sound.play();
