@@ -32,13 +32,14 @@ function startGame() {
     button.style.color = "white";
     document.body.appendChild(button);
     button.addEventListener('click', () => {
-    SimonSays(song);
-    console.log('Button clicked');
+        let song: string = "CDEFGAHC'"
+        SimonSays(song);
+        console.log('Button clicked');
 });
 
     // Initialize the xylophone game
     initXylophoneGame();
-    let song: string = "CDEFGAHC'"
+
    
 }
 
