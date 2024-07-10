@@ -276,11 +276,11 @@ function victory(): void {
     document.body.appendChild(victory);
 
     let p: HTMLElement = document.createElement("p");
-    p.textContent = "You played the correct notes";
+    p.textContent = "You played the correct notes. Congratulations!";
     document.body.appendChild(p);
 
     let restartButton = document.createElement("button");
-    restartButton.textContent = "Restart";
+    restartButton.textContent = "Back to home screen";
     restartButton.addEventListener("click", restart);
     document.body.appendChild(restartButton);
 }
