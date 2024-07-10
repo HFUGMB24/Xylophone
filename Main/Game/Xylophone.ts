@@ -65,10 +65,12 @@ function startGame() {
         
 
         
-
-    // Initialize the xylophone game
-    initXylophoneGame();
 }
+
+   // Initialize the xylophone game
+   initXylophoneGame();
+
+
 }
 
 function initXylophoneGame() {
