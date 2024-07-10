@@ -206,6 +206,10 @@ function checkPlayerSong(_song: string, _player: string): boolean {
     return playerCorrect
 }
 
+let strikeCount: number = 0;
 function wrongKey(): void {
-
+    strikeCount += 1;
+    if(strikeCount >= 3) {
+        
+    }
 }
