@@ -63,6 +63,8 @@ function startGame() {
         document.body.appendChild(counter);
         counter.style.textAlign = "center";
 
+        songSelector();
+
       
         
 
@@ -71,6 +73,7 @@ function startGame() {
 
    // Initialize the xylophone game
    initXylophoneGame();
+  
 
 
 }
@@ -315,3 +318,13 @@ function songSelector(): void {
     document.body.appendChild(songButton3);
 
 }
+
+function selectSong(_event: MouseEvent) {
+
+
+
+
+
+}
+
+
