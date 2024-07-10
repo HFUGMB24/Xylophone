@@ -119,7 +119,7 @@ function initXylophoneGame() {
     }
 
 
-
+    let tempSong: string = "";
     function handleClick(_event: MouseEvent) {
         let x: number = _event.offsetX;
         let y: number = _event.offsetY;
@@ -132,20 +132,27 @@ function initXylophoneGame() {
                         let sound = new Audio(keyCheck.sound);
 
                         if (ctx.isPointInPath(keyCheck.path, x, y)) {
-                            playerSong = playerSong + keyCheck.pitch;
+                            
+                            tempSong = playerSong + keyCheck.pitch;
                             playKey(keyCheck);
 
+                            keysPlayed += 1;
                             
-                            
-                            if (checkPlayerSong(song, playerSong) == false) { 
+                            if (checkPlayerSong(song, tempSong) == false) { 
                                 console.log("You made a mistake");
                                 wrongKey();
+                                keysPlayed = keysPlayed - 1;
                             }
-                            else {keysPlayed += 1;}
+                            else {playerSong = tempSong;}
+                            
                             if (keysPlayed >= songProgress) {
                                 playerTurn = false;
                             }
+
                             console.log("Keys played: " + keysPlayed);
+                            if (playerSong.length == song.length) {
+                                victory();
+                            }
                             
                         }
                     }
@@ -224,8 +231,7 @@ function checkPlayerSong(_song: string, _player: string): boolean {
     if (songPart !== _player) {
         playerCorrect = false;
     }
-    console.log(_player);
-    console.log(songPart);
+
     return playerCorrect
 }
 
@@ -256,6 +262,11 @@ function gameOver():void {
     document.body.appendChild(retryButton);
 }
 
+function victory(): void {
+    
+}
+
 function restart(_event: MouseEvent):void {
     location.reload();
 }
+
