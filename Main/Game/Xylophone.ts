@@ -136,7 +136,7 @@ function initXylophoneGame() {
                             playKey(keyCheck);
 
                             
-                            console.log("Keys played: " + keysPlayed);
+                            
                             if (checkPlayerSong(song, playerSong) == false) { 
                                 console.log("You made a mistake");
                                 wrongKey();
@@ -145,6 +145,8 @@ function initXylophoneGame() {
                             if (keysPlayed >= songProgress) {
                                 playerTurn = false;
                             }
+                            console.log("Keys played: " + keysPlayed);
+                            
                         }
                     }
                 }
@@ -222,6 +224,8 @@ function checkPlayerSong(_song: string, _player: string): boolean {
     if (songPart !== _player) {
         playerCorrect = false;
     }
+    console.log(_player);
+    console.log(songPart);
     return playerCorrect
 }
 
@@ -230,7 +234,28 @@ function wrongKey(): void {
     strikeCount += 1;
     let strikes: HTMLElement = document.getElementsByTagName("span")[0];
     strikes.textContent = "Strikes: " + String(strikeCount);
-    
+    if (strikeCount >= 3){
+        gameOver();
+    }
+}
 
-    
+function gameOver():void {
+    document.body.innerHTML = "";
+
+    let gameOver: HTMLElement = document.createElement("h1")!;
+    gameOver.textContent = "Game Over";
+    document.body.appendChild(gameOver);
+
+    let p: HTMLElement = document.createElement("p");
+    p.textContent = "You played too many wrong notes. Skill Issue.";
+    document.body.appendChild(p);
+
+    let retryButton = document.createElement("button");
+    retryButton.textContent = "Try Again";
+    retryButton.addEventListener("click", restart);
+    document.body.appendChild(retryButton);
+}
+
+function restart(_event: MouseEvent):void {
+    location.reload();
 }
