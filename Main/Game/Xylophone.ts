@@ -7,7 +7,7 @@ let keys: XyloKey[] = [];
 let playerSong: string = "";
 let playerTurn: boolean = false;
 let keysPlayed: number = 0;
-let song: string = "12345678"; 
+let song: string = "12345678";
 
 interface XyloKey {
     sound: string,
@@ -22,7 +22,7 @@ interface XyloKey {
 
 function startGame() {
     // Get the selected game mode
-    const gameModeSelect = document.getElementById("game-mode") as HTMLSelectElement;
+    const gameModeSelect = document.getElementById("game-mode") as HTMLSelectElement; //gets gamemode
     currentGameMode = gameModeSelect.value;
 
     // Clear the body
@@ -63,12 +63,11 @@ function initXylophoneGame() {
         "Sounds/xylophone-g3.wav", "Sounds/xylophone-a.wav", "Sounds/xylophone-b-h.wav", "Sounds/xylophone-c2_kleines_C.wav"];
     let colors: string[] = ["#ea4029", "#2020b8", "#f3f646", "#42f4e9", "#53ed41", "#b53af3", "#f0af37", "#f360c0"];
 
-    const audioCtx = new AudioContext();
 
     canvas.addEventListener("click", handleClick);
     createBoard();
 
-    function createBoard() {
+    function createBoard() { //builds the xylophone
         let rods: Path2D = new Path2D;
         ctx.strokeStyle = "black";
         ctx.lineWidth = 3;
@@ -97,29 +96,17 @@ function initXylophoneGame() {
             }
 
             keys.push(newKey);
-            drawKey(newKey);
+            drawKey(newKey, ctx);
         }
     }
 
-    function drawKey(_key: XyloKey) {
-        let x: number = _key.posX;
-        let y: number = _key.posY;
-        let keyPath: Path2D = _key.path;
 
-        ctx.fillStyle = _key.color;
-        ctx.lineWidth = 1;
-
-        keyPath.moveTo(x, y);
-        keyPath.rect(x, y, _key.width, _key.length);
-        ctx.fill(keyPath);
-        ctx.stroke(keyPath);
-    }
 
     function handleClick(_event: MouseEvent) {
         let x: number = _event.offsetX;
         let y: number = _event.offsetY;
-        
-        if (currentGameMode === "Standard") {
+
+        if (currentGameMode === "Standard") { //StandardMode: Simon Says
             if (playerTurn == true) {
                 if (keysPlayed < songProgress) {
                     for (let i: number = 0; i < keys.length; i++) {
@@ -128,41 +115,67 @@ function initXylophoneGame() {
 
                         if (ctx.isPointInPath(keyCheck.path, x, y)) {
                             playerSong = playerSong + keyCheck.pitch;
-                            console.log(keyCheck.pitch);
-                            audioCtx.resume().then(() => {
-                                sound.play();
-                            });
+                            playKey(keyCheck);
+
                             keysPlayed += 1;
                             console.log("Keys played: " + keysPlayed);
-                            if (checkPlayerSong(song, playerSong) == false) {
+                            if (checkPlayerSong(song, playerSong) == false) { 
                                 console.log("You made a mistake");
+                                wrongKey();
                             }
-                            if(keysPlayed >= songProgress) {
+                            if (keysPlayed >= songProgress) {
                                 playerTurn = false;
                             }
                         }
-                    }               
+                    }
                 }
             }
-        } else if (currentGameMode === "Freemode") {
+        }
+        else if (currentGameMode === "Freemode") { //FreeMode: Player can play freely
             for (let i: number = 0; i < keys.length; i++) {
                 let keyCheck: XyloKey = keys[i];
-                let sound = new Audio(keyCheck.sound);
 
                 if (ctx.isPointInPath(keyCheck.path, x, y)) {
-                    console.log(keyCheck.pitch);
-                    audioCtx.resume().then(() => {
-                        sound.play();
-                    });
-                }
+                    playKey(keyCheck);
+                };
             }
         }
     }
 }
 
-let songProgress: number = 0;
-let strikeCount: number = 0;
+function drawKey(_key: XyloKey, _ctx: CanvasRenderingContext2D) {
+    let x: number = _key.posX;
+    let y: number = _key.posY;
+    let keyPath: Path2D = _key.path;
 
+    _ctx.fillStyle = _key.color;
+    _ctx.lineWidth = 1;
+
+    keyPath.moveTo(x, y);
+    keyPath.rect(x, y, _key.width, _key.length);
+    _ctx.fill(keyPath);
+    _ctx.stroke(keyPath);
+}
+
+
+function playKey(_key: XyloKey): void {
+    let sound = new Audio(_key.sound);
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const ctx: CanvasRenderingContext2D = canvas.getContext("2d")!;
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 10;
+    ctx.stroke(_key.path);
+    audioCtx.resume().then(() => {
+        sound.play();
+    });
+    //
+    drawKey(_key, ctx);
+}
+
+let songProgress: number = 0;
+
+
+//SimonSaysMode, Computer plays current note and waits for the player to play all previous notes plus the current one
 function simonSays(_song: string) {
     if (currentGameMode !== "Standard") return;
 
@@ -171,10 +184,7 @@ function simonSays(_song: string) {
         for (let b: number = 0; b < keys.length; b++) {
             if (note == keys[b].pitch) {
                 console.log(note);
-                let sound = new Audio(keys[b].sound);
-
-                audioCtx.resume();
-                sound.play();
+                playKey(keys[b]);
                 songProgress += 1;
                 playerTurn = true;
                 playerSong = "";
@@ -186,11 +196,16 @@ function simonSays(_song: string) {
     }
 }
 
+//checks if the notes player by player are correct
 function checkPlayerSong(_song: string, _player: string): boolean {
     let playerCorrect: boolean = true;
-    let songPart:string = _song.substring(0,keysPlayed);
+    let songPart: string = _song.substring(0, keysPlayed);
     if (songPart !== _player) {
         playerCorrect = false;
     }
     return playerCorrect
+}
+
+function wrongKey(): void {
+
 }
