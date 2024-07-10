@@ -76,6 +76,10 @@ function startGame() {
 function initXylophoneGame() {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     const ctx: CanvasRenderingContext2D = canvas.getContext("2d")!;
+    let restartButton = document.createElement("button");
+    restartButton.textContent = "Back to Menu";
+    restartButton.addEventListener("click", restart);
+    document.body.appendChild(restartButton);
 
     const keyCount = 8;
     let pitches: string[] = ["1", "2", "3", "4", "5", "6", "7", "8"];
