@@ -56,10 +56,19 @@ function startGame() {
         explanation.style.maxWidth = "300px";
         explanation.style.textAlign = "center";
         document.body.appendChild(explanation);
-    }
+
+        //Strike counter
+        let counter: HTMLElement = document.createElement("span");
+        counter.textContent = "Strikes: 0";
+        document.body.appendChild(counter);
+        counter.style.textAlign = "center";
+        
+
+        
 
     // Initialize the xylophone game
     initXylophoneGame();
+}
 }
 
 function initXylophoneGame() {
@@ -126,12 +135,13 @@ function initXylophoneGame() {
                             playerSong = playerSong + keyCheck.pitch;
                             playKey(keyCheck);
 
-                            keysPlayed += 1;
+                            
                             console.log("Keys played: " + keysPlayed);
                             if (checkPlayerSong(song, playerSong) == false) { 
                                 console.log("You made a mistake");
                                 wrongKey();
                             }
+                            else {keysPlayed += 1;}
                             if (keysPlayed >= songProgress) {
                                 playerTurn = false;
                             }
@@ -218,8 +228,9 @@ function checkPlayerSong(_song: string, _player: string): boolean {
 let strikeCount: number = 0;
 function wrongKey(): void {
     strikeCount += 1;
-    let counter
-    if(strikeCount >= 3) {
+    let strikes: HTMLElement = document.getElementsByTagName("span")[0];
+    strikes.textContent = "Strikes: " + String(strikeCount);
+    
 
-    }
+    
 }
