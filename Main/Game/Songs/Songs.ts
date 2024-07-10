@@ -1,5 +1,5 @@
 let song1: string = "11556654433221"; //Twinkle Twinkle
-let song2: string = "321233322233355321233322232"; // Mary Had a Little Lamb
+let song2: string = "3212333222333553212333222321"; // Mary Had a Little Lamb
 let song3: string = "112143254321145321143543211"; // Happy Birthday
 let song4: string = "334556654433221123322344433223322344433322113221"; // Ode to Joy
 let song5: string = "333344322233334433223433322"; // Jingle Bells
