@@ -62,6 +62,10 @@ function startGame() {
         counter.textContent = "Strikes: 0";
         document.body.appendChild(counter);
         counter.style.textAlign = "center";
+
+        songSelector();
+
+      
         
 
         
@@ -69,6 +73,7 @@ function startGame() {
 
    // Initialize the xylophone game
    initXylophoneGame();
+  
 
 
 }
@@ -76,6 +81,11 @@ function startGame() {
 function initXylophoneGame() {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     const ctx: CanvasRenderingContext2D = canvas.getContext("2d")!;
+
+    let restartButton = document.createElement("button");
+    restartButton.textContent = "Back to Menu";
+    restartButton.addEventListener("click", restart);
+    document.body.appendChild(restartButton);
 
     const keyCount = 8;
     let pitches: string[] = ["1", "2", "3", "4", "5", "6", "7", "8"];
@@ -286,4 +296,36 @@ function victory(): void {
 function restart(_event: MouseEvent):void {
     location.reload();
 }
+
+
+
+function songSelector(): void {
+    let songButton = document.createElement("button");
+    songButton.textContent = "Twinkle Twinkle Little Star";
+    songButton.id = "Twinkle";
+    songButton.addEventListener("click", restart);
+    document.body.appendChild(songButton);
+
+    let songButton2 = document.createElement("button");
+    songButton2.textContent = "Ode to Joy";
+    songButton2.id = "Joy";
+    songButton2.addEventListener("click", restart);
+    document.body.appendChild(songButton2);
+
+    let songButton3 = document.createElement("button");
+    songButton3.textContent = "Mary had a little Lamp";
+    songButton3.id = "Mary";
+    songButton3.addEventListener("click", restart);
+    document.body.appendChild(songButton3);
+
+}
+
+function selectSong(_event: MouseEvent) {
+    
+    
+
+
+
+}
+
 
