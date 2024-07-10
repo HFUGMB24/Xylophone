@@ -47,6 +47,15 @@ function startGame() {
             simonSays(song);
             console.log('Button clicked');
         });
+
+        //Explanation paragraph
+        const explanation = document.createElement("p");
+        explanation.textContent = "Press the button to play the next sound. Replay every sound you heard in order.";
+        explanation.style.marginTop = "10px";
+        explanation.style.fontWeight = "bold";
+        explanation.style.maxWidth = "300px";
+        explanation.style.textAlign = "center";
+        document.body.appendChild(explanation);
     }
 
     // Initialize the xylophone game
