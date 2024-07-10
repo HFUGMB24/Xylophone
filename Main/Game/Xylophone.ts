@@ -7,7 +7,7 @@ let keys: XyloKey[] = [];
 let playerSong: string = "";
 let playerTurn: boolean = false;
 let keysPlayed: number = 0;
-let song: string = "12345678";
+let song: string = "11556654433221";
 
 interface XyloKey {
     sound: string,
@@ -193,13 +193,14 @@ function playKey(_key: XyloKey): void {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     const ctx: CanvasRenderingContext2D = canvas.getContext("2d")!;
     ctx.strokeStyle = "white";
-    ctx.lineWidth = 10;
+    ctx.stroke(_key.path);
+    ctx.strokeStyle = "black";
     ctx.stroke(_key.path);
     audioCtx.resume().then(() => {
         sound.play();
     });
-    //
-    drawKey(_key, ctx);
+    ctx.strokeStyle = "black";
+    ctx.stroke(_key.path);
 }
 
 let songProgress: number = 0;
@@ -276,7 +277,7 @@ function victory(): void {
     document.body.appendChild(p);
 
     let restartButton = document.createElement("button");
-    restartButton.textContent = "Back to home screen";
+    restartButton.textContent = "Back to menu";
     restartButton.addEventListener("click", restart);
     document.body.appendChild(restartButton);
 }
