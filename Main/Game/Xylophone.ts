@@ -263,8 +263,22 @@ function gameOver():void {
 }
 
 function victory(): void {
-    
+    document.body.innerHTML = "";
+
+    let victory: HTMLElement = document.createElement("h1")!;
+    victory.textContent = "You`re Winner!";
+    document.body.appendChild(victory);
+
+    let p: HTMLElement = document.createElement("p");
+    p.textContent = "You played the correct notes";
+    document.body.appendChild(p);
+
+    let restartButton = document.createElement("button");
+    restartButton.textContent = "Restart";
+    restartButton.addEventListener("click", restart);
+    document.body.appendChild(restartButton);
 }
+
 
 function restart(_event: MouseEvent):void {
     location.reload();
