@@ -290,7 +290,7 @@ function victory(): void {
     document.body.innerHTML = "";
 
     let victory: HTMLElement = document.createElement("h1")!;
-    victory.textContent = "You`re Winner!";
+    victory.textContent = "You`re A Winner!";
     document.body.appendChild(victory);
 
     let p: HTMLElement = document.createElement("p");
