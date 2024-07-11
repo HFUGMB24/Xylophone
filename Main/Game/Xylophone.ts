@@ -22,7 +22,7 @@ interface XyloKey {
 
 function startGame() {
     // Get the selected game mode
-    const gameModeSelect = document.getElementById("game-mode") as HTMLSelectElement; //gets gamemode
+    const gameModeSelect = document.getElementById("game-mode") as HTMLSelectElement;
     currentGameMode = gameModeSelect.value;
 
     // Clear the body
@@ -64,18 +64,10 @@ function startGame() {
         counter.style.textAlign = "center";
 
         songSelector();
-
-      
-        
-
-        
-}
+    }
 
    // Initialize the xylophone game
    initXylophoneGame();
-  
-
-
 }
 
 function initXylophoneGame() {
@@ -93,11 +85,10 @@ function initXylophoneGame() {
         "Sounds/xylophone-g3.wav", "Sounds/xylophone-a.wav", "Sounds/xylophone-b-h.wav", "Sounds/xylophone-c2_kleines_C.wav"];
     let colors: string[] = ["#ea4029", "#2020b8", "#f3f646", "#42f4e9", "#53ed41", "#b53af3", "#f0af37", "#f360c0"];
 
-
     canvas.addEventListener("click", handleClick);
     createBoard();
 
-    function createBoard() { //builds the xylophone
+    function createBoard() {
         let rods: Path2D = new Path2D;
         ctx.strokeStyle = "black";
         ctx.lineWidth = 3;
@@ -130,21 +121,18 @@ function initXylophoneGame() {
         }
     }
 
-
     let tempSong: string = "";
     function handleClick(_event: MouseEvent) {
         let x: number = _event.offsetX;
         let y: number = _event.offsetY;
 
-        if (currentGameMode === "Standard") { //StandardMode: Simon Says
+        if (currentGameMode === "Standard") {
             if (playerTurn == true) {
                 if (keysPlayed < songProgress) {
                     for (let i: number = 0; i < keys.length; i++) {
                         let keyCheck: XyloKey = keys[i];
-                        let sound = new Audio(keyCheck.sound);
 
                         if (ctx.isPointInPath(keyCheck.path, x, y)) {
-                            
                             tempSong = playerSong + keyCheck.pitch;
                             playKey(keyCheck);
 
@@ -165,19 +153,18 @@ function initXylophoneGame() {
                             if (playerSong.length == song.length) {
                                 victory();
                             }
-                            
                         }
                     }
                 }
             }
         }
-        else if (currentGameMode === "Freemode") { //FreeMode: Player can play freely
+        else if (currentGameMode === "Freemode") {
             for (let i: number = 0; i < keys.length; i++) {
                 let keyCheck: XyloKey = keys[i];
 
                 if (ctx.isPointInPath(keyCheck.path, x, y)) {
                     playKey(keyCheck);
-                };
+                }
             }
         }
     }
@@ -197,26 +184,40 @@ function drawKey(_key: XyloKey, _ctx: CanvasRenderingContext2D) {
     _ctx.stroke(keyPath);
 }
 
-
 function playKey(_key: XyloKey): void {
     let sound = new Audio(_key.sound);
+    sound.play();
+    glowKey(_key);
+}
+
+function glowKey(_key: XyloKey): void {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     const ctx: CanvasRenderingContext2D = canvas.getContext("2d")!;
-    ctx.strokeStyle = "white";
-    ctx.stroke(_key.path);
-    ctx.strokeStyle = "black";
-    ctx.stroke(_key.path);
-    audioCtx.resume().then(() => {
-        sound.play();
-    });
-    ctx.strokeStyle = "black";
-    ctx.stroke(_key.path);
+    
+    const originalColor = _key.color;
+    
+    ctx.fillStyle = lightenColor(originalColor, 50);
+    ctx.fill(_key.path);
+    
+    setTimeout(() => {
+        ctx.fillStyle = originalColor;
+        ctx.fill(_key.path);
+        ctx.strokeStyle = "black";
+        ctx.stroke(_key.path);
+    }, 300);
+}
+
+function lightenColor(color: string, amount: number): string {
+    const hex = color.replace('#', '');
+    const rgb = parseInt(hex, 16);
+    const r = Math.min(255, ((rgb >> 16) & 0xff) + amount);
+    const g = Math.min(255, ((rgb >> 8) & 0xff) + amount);
+    const b = Math.min(255, (rgb & 0xff) + amount);
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
 
 let songProgress: number = 0;
 
-
-//SimonSaysMode, Computer plays current note and waits for the player to play all previous notes plus the current one
 function simonSays(_song: string) {
     if (currentGameMode !== "Standard") return;
 
@@ -237,7 +238,6 @@ function simonSays(_song: string) {
     }
 }
 
-//checks if the notes player by player are correct
 function checkPlayerSong(_song: string, _player: string): boolean {
     let playerCorrect: boolean = true;
     let songPart: string = _song.substring(0, keysPlayed);
@@ -292,54 +292,61 @@ function victory(): void {
     document.body.appendChild(restartButton);
 }
 
-
 function restart(_event: MouseEvent):void {
     location.reload();
 }
 
-
-
 function songSelector(): void {
+    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const buttonContainer = document.createElement("div");
+    buttonContainer.style.position = "absolute";
+    buttonContainer.style.left = `${canvas.offsetLeft - 270}px`; 
+    buttonContainer.style.top = `${canvas.offsetTop}px`;
+    buttonContainer.style.display = "flex";
+    buttonContainer.style.flexDirection = "column";
+    buttonContainer.style.gap = "10px";
+    
+
     let songButton = document.createElement("button");
     songButton.textContent = "Twinkle Twinkle Little Star";
     songButton.id = "11556654433221";
     songButton.className = "songSelect"
     songButton.addEventListener("click", selectSong);
-    document.body.appendChild(songButton);
+    buttonContainer.appendChild(songButton);
 
     let songButton2 = document.createElement("button");
     songButton2.textContent = "Ode to Joy";
     songButton2.id = "334554321123322";
     songButton2.className = "songSelect"
     songButton2.addEventListener("click", selectSong);
-    document.body.appendChild(songButton2);
+    buttonContainer.appendChild(songButton2);
 
     let songButton3 = document.createElement("button");
     songButton3.textContent = "Mary had a little Lamp";
     songButton3.id = "321233322233355321233322232";
     songButton3.className = "songSelect"
     songButton3.addEventListener("click", selectSong);
-    document.body.appendChild(songButton3);
+    buttonContainer.appendChild(songButton3);
 
     let songButton4 = document.createElement("button");
     songButton4.textContent = "Let It Be";
     songButton4.id = "3213566653213334332321";
     songButton4.className = "songSelect"
     songButton4.addEventListener("click", selectSong);
-    document.body.appendChild(songButton4);
+    buttonContainer.appendChild(songButton4);
 
     let songButton5 = document.createElement("button");
     songButton5.textContent = "Funky Town (Riff)";
     songButton5.id = "5545225875";
     songButton5.className = "songSelect"
     songButton5.addEventListener("click", selectSong);
-    document.body.appendChild(songButton5);
+    buttonContainer.appendChild(songButton5);
 
+    document.body.appendChild(buttonContainer);
 
 }
 
 function selectSong(_event: MouseEvent) {
-
     song = (_event.target as Element).id;
     playerSong = "";
     keysPlayed = 0;
@@ -348,8 +355,6 @@ function selectSong(_event: MouseEvent) {
     let counter: HTMLElement = document.getElementsByTagName("span")[0];
     counter.textContent = "Strikes: 0";
     playerTurn = false;
-    
-
 }
 
 
